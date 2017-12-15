@@ -20,12 +20,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>MinimumOSVersion</key>
-	<string>11.1</string>
 	<key>CFBundleDisplayName</key>
 	<string>AppCenterSample</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.AppCenterSample</string>
+	<string>jp.ytabuchi.AppCenterSample</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>CFBundleIconFiles</key>
@@ -50,5 +48,7 @@
 	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
 	<string>AppCenterSample</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0.0</string>
 </dict>
 </plist>
