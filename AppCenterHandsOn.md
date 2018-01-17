@@ -188,14 +188,14 @@ else
 
 > java.lang.OutOfMemoryError. Consider increasing the value of $(JavaMaximumHeapSize). Java ran out of memory while executing 'java.exe ...<br />
 と、Android プロジェクトでヒープメモリのビルドエラーが出る場合、Android プロジェクトのプロパティを開き、「Android オプション＞詳細設定（一番下にあるボタン）＞Java Max Heap Size」を「1G」に指定してください。<br />
-<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs101.png" />
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs101.png" width="300" />
 
 
 この時点で、OS 情報などの Analytics が取得出来ていることが確認できます。
 
 App Center でビルドしたアプリ（今回は Android）の「Analytics」を開いてみましょう。Emulator で言語設定が英語になっているのが分かります。
 
-<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac201.png" />
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac201.png" width="600" />
 
 
 
