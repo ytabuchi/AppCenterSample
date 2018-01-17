@@ -240,6 +240,18 @@ GitHub や VSTS（Visual Studio Team Service）、BitBucket のレポジトリ�
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac308.png" width="600" />
 
 
+iOS もビルドしてみましょう。iOS の場合は、Simulator 用のビルド（x86 のバイナリ）とデバイス用のビルド（ARM バイナリ）を指定する必要があり、デバイス用のビルドには Apple Developer Program に加入すると取得できる証明書で署名する必要があります。今回は、デバッグビルド、Simulator Build、Sign なしを選択してビルドしてみましょう。
+
+
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac309.png" width="600" />
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac310.png" width="600" />
+
+
+無事ビルドが完了しました！
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac311.png" width="600" />
 
 
 
