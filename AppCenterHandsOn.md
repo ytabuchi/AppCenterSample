@@ -174,7 +174,7 @@ using Microsoft.AppCenter.Crashes;
 同じファイルの `OnStart()` メソッド内に次のコードを追加します。
 
 ```cs
-AppCenter.Start($"uwp={Your UWP App secret here};android={Your Android App secret here};ios={Your iOS App secret here}",
+AppCenter.Start($"uwp={Your UWP App secret here};android={Your Android App secret here};ios={Your iOS App secret here}",
     typeof(Analytics), typeof(Crashes));
 ```
 
