@@ -174,7 +174,7 @@ using Microsoft.AppCenter.Crashes;
 同じファイルの `OnStart()` メソッド内に次のコードを追加します。
 
 ```cs
-AppCenter.Start($"uwp={Your UWP App secret here};android={Your Android App secret here};ios={Your iOS App secret here}",
+AppCenter.Start($"uwp={Your UWP App secret here};android={Your Android App secret here};ios={Your iOS App secret here}",
     typeof(Analytics), typeof(Crashes));
 ```
 
@@ -250,12 +250,12 @@ iOS もビルドしてみましょう。iOS の場合は、Simulator 用のビ�
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac311.png" width="600" />
 
 
-それでは、App Center の目玉の機能の一つである Analytics と Crash Report を使ってみましょう。
+それでは、App Center の目玉の機能の一つである Analytics と Crash Report を使ってみましょう。
 
 
 ### Analytics
 
-Analytics はユーザーがアプリでどのような操作を行ったかなどを記録する機能です。詳しくは以下の公式ドキュメントをご覧ください。
+Analytics はユーザーがアプリでどのような操作を行ったかなどを記録する機能です。詳しくは以下の公式ドキュメントをご覧ください。
 
 [App Center Analytics for Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/appcenter/sdk/analytics/xamarin)
 
@@ -340,7 +340,7 @@ public partial class MainPage : ContentPage
 
 ナビゲーション先の `SecondPage` を作成します。
 
-実際にアプリを動かしてみましょう。ローカルのビルドで構いません。iOS は Release モードでビルドをしてください。
+実際にアプリを動かしてみましょう。ローカルのビルドで構いません。iOS は Release モードでビルドをしてください。
 
 SecondPage に遷移すると、Analytics の画面で各種情報が見られるようになります。
 
@@ -353,7 +353,7 @@ SecondPage に遷移すると、Analytics の画面で各種情報が見られ�
 
 [App Center Crashes for Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/appcenter/sdk/crashes/xamarin)
 
-App Center SDK にはテストのクラッシュを発生させるメソッドが用意されています。
+App Center SDK にはテストのクラッシュを発生させるメソッドが用意されています。
 
 ```csharp
 Crashes.GenerateTestCrash();
@@ -401,7 +401,7 @@ public ThirdPage()
 
 void Button1_Clicked(object sender, EventArgs e)
 {
-    // App Center SDK で用意されているクラッシュ送付メソッド
+    // App Center SDK で用意されているクラッシュ送付メソッド
     // TestCrashException が Throw されます
     Crashes.GenerateTestCrash();
 }
@@ -418,18 +418,18 @@ void Button2_Clicked(object sender, EventArgs e)
 
 集まった Exception は Crash の画面に表示されていきます。
 
-エラーの種類でまとまって、⚡️が件数、🙍‍♂️がデバイス数です。
+エラーの種類でまとまって、⚡️が件数、🙍‍♂️がデバイス数です。
 
 
 ### 現時点でのまとめ
 
-SDK をインストールして、キーを指定するだけでビルドができて、Analytics、Crash のデータも取れます。便利ですよね。
+SDK をインストールして、キーを指定するだけでビルドができて、Analytics、Crash のデータも取れます。便利ですよね。
 
 
 
 その他、App Center には以下の機能もあります。ぜひ使ってみてください。
 
-なお、Android の Test、Distribute にはご自身で作成した keystore か Xamarin が用意した Debug 用の keystore を使用します。通常の Debug 時にXamarin が使用するキーは、通常の Android 開発で使用するキーとは場所が異なりますので以下に記載しておきます。
+なお、Android の Test、Distribute にはご自身で作成した keystore か Xamarin が用意した Debug 用の keystore を使用します。通常の Debug 時にXamarin が使用するキーは、通常の Android 開発で使用するキーとは場所が異なりますので以下に記載しておきます。
 
 Windows：<br />
 `%LOCALAPPDATA%\Xamarin\Mono for Android\debug.keystore`
@@ -466,6 +466,6 @@ macOS：<br />
 
 ## まとめ
 
-App Center は「VSTS の小規模版＋App Insights Xamarin 版」のような感じで、簡単に CI/CD の環境、およびアプリ解析の環境を提供してくれる中々良いサービスだと思います。
+App Center は「VSTS の小規模版＋App Insights Xamarin 版」のような感じで、簡単に CI/CD の環境、およびアプリ解析の環境を提供してくれる中々良いサービスだと思います。
 
 ぜひ周りの方にも使ってもらってみてください。
