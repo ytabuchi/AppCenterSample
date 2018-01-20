@@ -174,12 +174,8 @@ using Microsoft.AppCenter.Crashes;
 同じファイルの `OnStart()` メソッド内に次のコードを追加します。
 
 ```cs
-if (Xamarin.Forms.Device.RuntimePlatform == Xamarin.Forms.Device.UWP)
-    AppCenter.Start("uwp={Your UWP App secret here};", 
-        typeof(Analytics));
-else
-    AppCenter.Start("android={Your Android App secret here};" + "ios={Your iOS App secret here}",
-        typeof(Analytics), typeof(Crashes));
+AppCenter.Start($"uwp={Your UWP App secret here};android={Your Android App secret here};ios={Your iOS App secret here}",
+    typeof(Analytics), typeof(Crashes));
 ```
 
 > Secret は各プラットフォーム毎に発行されます。「App Center にアプリ追加」の章で作成した各プラットフォームの App Secret で上記の {Your xxx App secret here} を置き換えてください。
@@ -254,45 +250,215 @@ iOS もビルドしてみましょう。iOS の場合は、Simulator 用のビ�
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac311.png" width="600" />
 
 
+それでは、App Center の目玉の機能の一つである Analytics と Crash Report を使ってみましょう。
 
-> 以下、執筆中
+
+### Analytics
+
+Analytics はユーザーがアプリでどのような操作を行ったかなどを記録する機能です。詳しくは以下の公式ドキュメントをご覧ください。
+
+[App Center Analytics for Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/appcenter/sdk/analytics/xamarin)
+
+Analytics では、
+
+- 5 個までのプロパティ
+- 200 個までのイベント名
+- 各イベント 64 文字
+
+の仕様の元、例えば以下のようにデータを送信することができます。
+
+```csharp
+Analytics.TrackEvent("Video clicked", new Dictionary<string, string> {
+    { "Category", "Music" },
+    { "FileName", "favorite.avi"}
+});
+```
+
+単にイベントをトラックしたいだけなら以下のように簡単にも書けます。
+
+```csharp
+Analytics.TrackEvent("Video clicked");
+```
+
+トラックの開始／停止、チェックはそれぞれ以下のコードで可能です。
+
+```csharp
+// 停止
+Analytics.SetEnabledAsync(false);
+
+// 開始
+Analytics.SetEnabledAsync(true);
+
+// チェック
+bool isEnabled = await Analytics.IsEnabledAsync();
+```
+
+では実際に組み込んでみましょう。
+
+まずはページを用意します。
+
+`MainPage.xaml` を開き、`Content` を次のコードで置き換えます。
+
+```xml
+<StackLayout VerticalOptions="Center">
+    <Label Text="Welcome to Xamarin.Forms!" 
+           HorizontalOptions="Center" />
+    <Button Text="Show Second Page"
+            Clicked="Button1_Clicked" />
+    <Button Text="Show Third Page"
+            Clicked="Button2_Clicked" />
+</StackLayout>
+```
+
+次に `MainPage.xaml.cs` を開き、`MainPage` クラスを次のコードで置き換えます。
+
+```csharp
+public partial class MainPage : ContentPage
+{
+	public MainPage()
+	{
+		InitializeComponent();
+	}
+
+    async void Button1_Clicked(object sender, System.EventArgs e)
+    {
+        Analytics.TrackEvent("Navigation", new Dictionary<string, string>{
+            {"MainPage", "SecondPage"}
+        });
+        await Navigation.PushAsync(new SecondPage());
+    }
+
+    async void Button2_Clicked(object sender, System.EventArgs e)
+    {
+        Analytics.TrackEvent("Navigation", new Dictionary<string, string>{
+            {"MainPage", "ThirdPage"}
+        });
+        await Navigation.PushAsync(new ThirdPage());
+    }
+}
+```
+
+ナビゲーション先の `SecondPage` を作成します。
+
+実際にアプリを動かしてみましょう。ローカルのビルドで構いません。iOS は Release モードでビルドをしてください。
+
+SecondPage に遷移すると、Analytics の画面で各種情報が見られるようになります。
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac401.png" width="600" />
+
+
+### Crashes
+
+クラッシュイベントを取得する機能です。詳しくは以下の公式ドキュメントをご覧ください。
+
+[App Center Crashes for Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/appcenter/sdk/crashes/xamarin)
+
+App Center SDK にはテストのクラッシュを発生させるメソッドが用意されています。
+
+```csharp
+Crashes.GenerateTestCrash();
+```
+
+これも実際に組み込んでみましょう。
+
+`ThirdPage` を作成します。`ThirdPage` は C# で作成してみました。
+
+`ThirdPage` の ThirdPage クラスの C# コードを次のコードで置き換えます。
+
+```csharp
+public ThirdPage()
+{
+    var label = new Label
+    {
+        Text = "Third Page",
+        HorizontalTextAlignment = TextAlignment.Center,
+    };
+
+    var button1 = new Button
+    {
+        Text = "Crash test!",
+    };
+    button1.Clicked += Button1_Clicked;
+
+    var button2 = new Button
+    {
+        Text = "Crash test!",
+    };
+    button2.Clicked += Button2_Clicked;
+
+
+    Title = "Third Page";
+    Content = new StackLayout
+    {
+        VerticalOptions = LayoutOptions.Center,
+        Children = {
+            label,
+            button1,
+            button2
+        }
+    };
+}
+
+void Button1_Clicked(object sender, EventArgs e)
+{
+    // App Center SDK で用意されているクラッシュ送付メソッド
+    // TestCrashException が Throw されます
+    Crashes.GenerateTestCrash();
+}
+
+void Button2_Clicked(object sender, EventArgs e)
+{
+    throw new throw new SystemException();
+}
+```
+
+上のボタンで、App Center SDK で用意されている TestCrashException が Throw され、下のボタンで SystemException が Throw されます。
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac501.png" width="600" />
+
+集まった Exception は Crash の画面に表示されていきます。
+
+エラーの種類でまとまって、⚡️が件数、🙍‍♂️がデバイス数です。
+
+
+### 現時点でのまとめ
+
+SDK をインストールして、キーを指定するだけでビルドができて、Analytics、Crash のデータも取れます。便利ですよね。
+
+
+
+その他、App Center には以下の機能もあります。ぜひ使ってみてください。
+
+なお、Android の Test、Distribute にはご自身で作成した keystore か Xamarin が用意した Debug 用の keystore を使用します。通常の Debug 時にXamarin が使用するキーは、通常の Android 開発で使用するキーとは場所が異なりますので以下に記載しておきます。
+
+Windows：<br />
+`%LOCALAPPDATA%\Xamarin\Mono for Android\debug.keystore`
+
+macOS：<br />
+`~/.local/share/Xamarin/Mono for Android/debug.keystore`
+
+詳細は [Finding your Keystore's MD5 or SHA1 Signature \- Xamarin](https://developer.xamarin.com/guides/android/deployment,_testing,_and_metrics/MD5_SHA1/) をご参照ください。
+
+
 
 ### Test
 
-Windows
-
-`%LOCALAPPDATA%\Xamarin\Mono for Android\debug.keystore`
-
-macOS
-
-`~/.local/share/Xamarin/Mono for Android/debug.keystore`
-
-[Finding your Keystore's MD5 or SHA1 Signature \- Xamarin](https://developer.xamarin.com/guides/android/deployment,_testing,_and_metrics/MD5_SHA1/)
-
+公式ドキュメント：<br />
+[App Center Test \| Microsoft Docs](https://docs.microsoft.com/en-us/appcenter/test-cloud/)
 
 
 
 ### Distribute
 
-xxx
+公式ドキュメント：<br />
+[Distribute Mobile Apps with App Center \| Microsoft Docs](https://docs.microsoft.com/en-us/appcenter/distribution/)
 
-
-### Crashes
-
-xxx
-
-
-### Analytics
-
-xxx
 
 
 ### Push
 
-xxx
-
-
-
+公式ドキュメント：<br />
+[App Center Push \| Microsoft Docs](https://docs.microsoft.com/en-us/appcenter/push/)
 
 
 
@@ -300,3 +466,6 @@ xxx
 
 ## まとめ
 
+App Center は「VSTS の小規模版＋App Insights Xamarin 版」のような感じで、簡単に CI/CD の環境、およびアプリ解析の環境を提供してくれる中々良いサービスだと思います。
+
+ぜひ周りの方にも使ってもらってみてください。

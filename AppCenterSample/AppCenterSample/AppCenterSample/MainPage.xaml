@@ -1,11 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:AppCenterSample"
-             x:Class="AppCenterSample.MainPage">
-
-	<Label Text="Welcome to Xamarin.Forms!" 
-           VerticalOptions="Center" 
-           HorizontalOptions="Center" />
-
+             x:Class="AppCenterSample.MainPage"
+             Title="Main Page">
+    <StackLayout VerticalOptions="Center">
+        <Label Text="Welcome to Xamarin.Forms!" 
+               HorizontalOptions="Center" />
+        <Button Text="Show Second Page"
+                Clicked="Button1_Clicked" />
+        <Button Text="Show Third Page"
+                Clicked="Button2_Clicked" />
+    </StackLayout>
 </ContentPage>
