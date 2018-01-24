@@ -478,6 +478,11 @@ App Center の左側のメニューで Distribute をクリックし、右上の
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac609.png" width="600" />
 
+Android からアクセスするとこのように「Download」のリンクがありますので、ダウンロードしてインストールします。
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/an002.png" width="300" />
+
+
 皆さんも Android アプリを配布してベータテストなどをやってもらいましょう！
 
 
