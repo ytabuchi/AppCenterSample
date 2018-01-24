@@ -4,11 +4,11 @@
 
 ## はじめに
 
-このドキュメントでは、GitHub に配置したレポジトリと Visual Studio App Center を連携させて、Xamarin.Forms のアプリの自動ビルド、アプリの Analytics や Crash レポート、配布などを試してみよう！というハンズオンが出来ます。
+このドキュメントでは、GitHub に配置したレポジトリと Microsoft の Visual Studio App Center を連携させて、Xamarin.Forms のアプリの自動ビルド、アプリの Analytics や Crash レポート、配布などを試してみよう！というハンズオンが出来ます。
 
 私 [@ytabuchi](https://twitter.com/ytabuchi) の主宰している JXUG の勉強会、[JXUGC \#24 春の App Center 祭り \- connpass](https://jxug.connpass.com/event/72491/) で行ったミニハンズオン用に用意したものですが、見積もっていた時間がかなり少なかったため、終わらない方もいらっしゃいました。大変申し訳ありませんでした。
 
-そのため、短期間で確実で出来るように内容をブラッシュアップさせたものを再度公開します。是非、App Center での各種機能を味わってみてください。
+そのため、短時間でも確実で完遂できるように内容をブラッシュアップさせたものを再度公開します。是非、App Center での各種機能を味わってみてください。
 
 
 
@@ -55,8 +55,13 @@ Fork が完了すると、自身のレポジトリに `AppCenterSample` レポ�
 
 GitHub の準備が完了したので、右側の「Clone or download」ボタンをクリックしてローカルに Clone します。
 
-<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/gh005.png" width="600" />
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/gh003.png" width="600" />
 
+GitHub Desktop の場合は次のような確認画面が出てローカルに Clone が出来ます。
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/gh004.png" width="450" />
+
+Clone されたら GitHub での作業はひとまず完了です。
 
 
 
