@@ -278,11 +278,24 @@ iOS の場合は、Simulator 用のビルド（x86 のバイナリ）とデバ�
 
 GitHub のリポジトリにプッシュしてみましょう。
 
-Visual Studio からはチームエクスプローラーから「変更」をクリックして、コミットメッセージを入力し「すべてをコミット」して、その後「同期」します。
+Visual Studio からはチームエクスプローラーから「変更」をクリックして、コミットメッセージを入力し「すべてをコミット」します。その後「同期」します。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac312.png" width="450" />
 
-それでは、App Center の目玉の機能の一つである Analytics と Crash Report を使ってみましょう。
+その後「同期」します。
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac313.png" width="450" />
+
+GitHub Desktop の場合は、左下でコミットメッセージを入力し「Commit」ボタンでコミットした後、右上の「Fetch origin」ボタンで同期します。
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac314.png" width="600" />
+
+2 回目の自動ビルドが始まり、成功するはずです。
+
+おめでとうございます。これで自動ビルドの環境が整いました。設定で指定したブランチにプッシュされる度に自動的にビルドが走り、ビルドが成功するか失敗するかが分かります。
+
+それでは引き続き、App Center の目玉の機能の一つである Analytics と Crash Report を使ってみましょう。
+
 
 
 ### Analytics
@@ -325,58 +338,34 @@ Analytics.SetEnabledAsync(true);
 bool isEnabled = await Analytics.IsEnabledAsync();
 ```
 
-では実際に組み込んでみましょう。
+`AppCenterSample` では `MainPage` にあるページ遷移するボタンのクリックイベント内に、イベントトラックのメソッドを組み込んでいます。
 
-まずはページを用意します。
-
-`MainPage.xaml` を開き、`Content` を次のコードで置き換えます。
-
-```xml
-<StackLayout VerticalOptions="Center">
-    <Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Center" />
-    <Button Text="Show Second Page"
-            Clicked="Button1_Clicked" />
-    <Button Text="Show Third Page"
-            Clicked="Button2_Clicked" />
-</StackLayout>
-```
-
-次に `MainPage.xaml.cs` を開き、`MainPage` クラスを次のコードで置き換えます。
+`MainPage.xaml.cs` を開きます。各クリックイベント内の `Analytics.TrackEvent` でページ遷移を送信しています。
 
 ```csharp
-public partial class MainPage : ContentPage
+async void Button1_Clicked(object sender, System.EventArgs e)
 {
-	public MainPage()
-	{
-		InitializeComponent();
-	}
+    Analytics.TrackEvent("Navigation", new Dictionary<string, string>{
+        {"MainPage", "SecondPage"}
+    });
+    await Navigation.PushAsync(new SecondPage());
+}
 
-    async void Button1_Clicked(object sender, System.EventArgs e)
-    {
-        Analytics.TrackEvent("Navigation", new Dictionary<string, string>{
-            {"MainPage", "SecondPage"}
-        });
-        await Navigation.PushAsync(new SecondPage());
-    }
-
-    async void Button2_Clicked(object sender, System.EventArgs e)
-    {
-        Analytics.TrackEvent("Navigation", new Dictionary<string, string>{
-            {"MainPage", "ThirdPage"}
-        });
-        await Navigation.PushAsync(new ThirdPage());
-    }
+async void Button2_Clicked(object sender, System.EventArgs e)
+{
+    Analytics.TrackEvent("Navigation", new Dictionary<string, string>{
+        {"MainPage", "ThirdPage"}
+    });
+    await Navigation.PushAsync(new ThirdPage());
 }
 ```
 
-ナビゲーション先の `SecondPage` を作成します。
+実際にアプリを動かしてみましょう。ローカルのビルドで構いません。iOS は Release モードでビルドしないとイベントが送付されませんので注意してください。
 
-実際にアプリを動かしてみましょう。ローカルのビルドで構いません。iOS は Release モードでビルドをしてください。
-
-SecondPage に遷移すると、Analytics の画面で各種情報が見られるようになります。
+SecondPage に遷移すると、Analytics の画面で遷移したデータが見られるようになります。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac401.png" width="600" />
+
 
 
 ### Crashes
@@ -391,56 +380,23 @@ App Center SDK にはテストのクラッシュを発生させるメソッド�
 Crashes.GenerateTestCrash();
 ```
 
-これも実際に組み込んでみましょう。
+これも実際に組み込んであります。
 
-`ThirdPage` を作成します。`ThirdPage` は C# で作成してみました。
+`ThirdPage.cs` を開きます。
 
-`ThirdPage` の ThirdPage クラスの C# コードを次のコードで置き換えます。
+ThirdPage クラスの次のコードで Exception を `Throw` しています。
 
 ```csharp
-public ThirdPage()
-{
-    var label = new Label
-    {
-        Text = "Third Page",
-        HorizontalTextAlignment = TextAlignment.Center,
-    };
-
-    var button1 = new Button
-    {
-        Text = "Crash test!",
-    };
-    button1.Clicked += Button1_Clicked;
-
-    var button2 = new Button
-    {
-        Text = "Crash test!",
-    };
-    button2.Clicked += Button2_Clicked;
-
-
-    Title = "Third Page";
-    Content = new StackLayout
-    {
-        VerticalOptions = LayoutOptions.Center,
-        Children = {
-            label,
-            button1,
-            button2
-        }
-    };
-}
-
 void Button1_Clicked(object sender, EventArgs e)
 {
     // App Center SDK で用意されているクラッシュ送付メソッド
-    // TestCrashException が Throw されます
+    // TestCrashException が Throw されます。Release モードではレポートは飛ばないようです。
     Crashes.GenerateTestCrash();
 }
 
 void Button2_Clicked(object sender, EventArgs e)
 {
-    throw new throw new SystemException();
+    throw new SystemException();
 }
 ```
 
@@ -450,16 +406,47 @@ void Button2_Clicked(object sender, EventArgs e)
 
 集まった Exception は Crash の画面に表示されていきます。
 
-エラーの種類でまとまって、⚡️が件数、🙍‍♂️がデバイス数です。
+エラーの種類でまとまって表示され、Impact 欄の⚡️が件数、🙍‍♂️がデバイス数です。
 
 
-### 現時点でのまとめ
+
+
+
+## 現時点でのまとめ
 
 SDK をインストールして、キーを指定するだけでビルドができて、Analytics、Crash のデータも取れます。便利ですよね。
 
+その他、App Center には以下の機能もあります。まだあまり詳しく調べられていませんが、App Center 祭りの資料などもご覧いただければと思います。
 
 
-その他、App Center には以下の機能もあります。ぜひ使ってみてください。
+### Test
+
+公式ドキュメント：<br />
+[App Center Test \| Microsoft Docs](https://docs.microsoft.com/en-us/appcenter/test-cloud/)
+
+こちらの機能は有料のみとなっています。以前は Xamarin Test Cloud と呼ばれていました。
+
+
+### Push
+
+公式ドキュメント：<br />
+[App Center Push \| Microsoft Docs](https://docs.microsoft.com/en-us/appcenter/push/)
+
+
+### Distribute
+
+公式ドキュメント：<br />
+[Distribute Mobile Apps with App Center \| Microsoft Docs](https://docs.microsoft.com/en-us/appcenter/distribution/)
+
+DeployGate や Testflight と同じような機能です。本ハンズオンのおまけとして Android の配布を行ってみましょう。
+
+App Center の左側のメニューで Distribute をクリックし、右上の「New Group」をクリックします。
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac601.png" width="600" />
+
+「Group name」に任意の名前を付け、
+
+
 
 なお、Android の Test、Distribute にはご自身で作成した keystore か Xamarin が用意した Debug 用の keystore を使用します。通常の Debug 時にXamarin が使用するキーは、通常の Android 開発で使用するキーとは場所が異なりますので以下に記載しておきます。
 
@@ -473,24 +460,6 @@ macOS：<br />
 
 
 
-### Test
-
-公式ドキュメント：<br />
-[App Center Test \| Microsoft Docs](https://docs.microsoft.com/en-us/appcenter/test-cloud/)
-
-
-
-### Distribute
-
-公式ドキュメント：<br />
-[Distribute Mobile Apps with App Center \| Microsoft Docs](https://docs.microsoft.com/en-us/appcenter/distribution/)
-
-
-
-### Push
-
-公式ドキュメント：<br />
-[App Center Push \| Microsoft Docs](https://docs.microsoft.com/en-us/appcenter/push/)
 
 
 
