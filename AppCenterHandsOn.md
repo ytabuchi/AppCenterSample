@@ -444,29 +444,48 @@ App Center の左側のメニューで Distribute をクリックし、右上の
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac601.png" width="600" />
 
-「Group name」に任意の名前を付け、
+「Group name」に任意の名前を付け、「Allow public access」をオンにして「Create Group」をクリックします。
 
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac602.png" width="600" />
 
+そのまま「Distribute new release」をクリックします。
 
-なお、Android の Test、Distribute にはご自身で作成した keystore か Xamarin が用意した Debug 用の keystore を使用します。通常の Debug 時にXamarin が使用するキーは、通常の Android 開発で使用するキーとは場所が異なりますので以下に記載しておきます。
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac603.png" width="600" />
 
-Windows：<br />
-`%LOCALAPPDATA%\Xamarin\Mono for Android\debug.keystore`
+「Distribute」の画面で下の「Choose build from branch」をクリックします。
 
-macOS：<br />
-`~/.local/share/Xamarin/Mono for Android/debug.keystore`
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac604.png" width="600" />
 
-詳細は [Finding your Keystore's MD5 or SHA1 Signature \- Xamarin](https://developer.xamarin.com/guides/android/deployment,_testing,_and_metrics/MD5_SHA1/) をご参照ください。
+ブランチを選んで「Next」をクリックします。
 
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac605.png" width="600" />
 
+ビルドを選んで「Next」をクリックします。
 
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac606.png" width="600" />
 
+「Release notes (optional)」は今回はそのままで「Next」をクリックします。
 
+最後に「Distribute」ボタンをクリックします。
 
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac607.png" width="600" />
+
+「Release」タブをクリックすると、無事配布バイナリが用意されていることが確認できます。上部のリンクからは公開 URL が参照できて、下のリリースをクリックすると APK をダウンロードすることも可能です。
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac608.png" width="600" />
+
+テスト配布として作成した URL は [こちら](https://install.appcenter.ms/users/ytabuchi/apps/appcentersampleandroid/distribution_groups/distributiontest) です。
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac609.png" width="600" />
+
+皆さんも Android アプリを配布してベータテストなどをやってもらいましょう！
 
 
 ## まとめ
 
 App Center は「VSTS の小規模版＋App Insights Xamarin 版」のような感じで、簡単に CI/CD の環境、およびアプリ解析の環境を提供してくれる中々良いサービスだと思います。
 
-ぜひ周りの方にも使ってもらってみてください。
+ぜひ周りの方にもお勧めして使ってもらってみてください！
+
+
+
