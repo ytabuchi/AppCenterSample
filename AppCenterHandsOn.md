@@ -276,7 +276,11 @@ iOS の場合は、Simulator 用のビルド（x86 のバイナリ）とデバ�
 
 この段階で、リポジトリのソースコードは元々ある App Secret が入力された状態でビルドされましたが、ローカルの App Secret は皆さんのキーで書き換えられています。
 
+GitHub のリポジトリにプッシュしてみましょう。
 
+Visual Studio からはチームエクスプローラーから「変更」をクリックして、コミットメッセージを入力し「すべてをコミット」して、その後「同期」します。
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac312.png" width="450" />
 
 それでは、App Center の目玉の機能の一つである Analytics と Crash Report を使ってみましょう。
 
