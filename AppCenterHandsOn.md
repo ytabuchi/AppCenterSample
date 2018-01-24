@@ -4,7 +4,7 @@
 
 ## はじめに
 
-このドキュメントでは、GitHub に配置したレポジトリと Microsoft の Visual Studio App Center を連携させて、Xamarin.Forms のアプリの自動ビルド、アプリの Analytics や Crash レポート、配布などを試してみよう！というハンズオンが出来ます。
+このドキュメントでは、GitHub に配置したリポジトリと Microsoft の Visual Studio App Center を連携させて、Xamarin.Forms のアプリの自動ビルド、アプリの Analytics や Crash レポート、配布などを試してみよう！というハンズオンが出来ます。
 
 私 [@ytabuchi](https://twitter.com/ytabuchi) の主宰している JXUG の勉強会、[JXUGC \#24 春の App Center 祭り \- connpass](https://jxug.connpass.com/event/72491/) で行ったミニハンズオン用に用意したものですが、見積もっていた時間がかなり少なかったため、終わらない方もいらっしゃいました。大変申し訳ありませんでした。
 
@@ -22,7 +22,9 @@
 実際の作業を始める前に、いくつか事前準備が必要です。
 
 
-### GitHub アカウントの準備
+
+
+### GitHub での準備
 
 このハンズオンでは、GitHub の連携を使用して App Center の Build や Analytics を体験するため、GitHub のアカウントが必要です。
 
@@ -41,17 +43,15 @@
 GitHub のクライアントでお持ちの、または作成したアカウントでログインしておきます。
 
 
+#### リポジトリの作成
 
+アカウントを作成したら、本リポジトリを自身の GitHub に Fork します。
 
-#### レポジトリの作成
-
-アカウントを作成したら、本レポジトリを自身の GitHub に Fork します。
-
-[本レポジトリのルート](https://github.com/ytabuchi/AppCenterSample) にアクセスし、右上の「Fork」ボタンをクリックします。
+[本リポジトリのルート](https://github.com/ytabuchi/AppCenterSample) にアクセスし、右上の「Fork」ボタンをクリックします。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/gh002.png" width="600" />
 
-Fork が完了すると、自身のレポジトリに `AppCenterSample` レポジトリが追加され、レポジトリ名の下に「forked from ytabuchi/AppCenterSample」と表示されているはずです。
+Fork が完了すると、自身のリポジトリに `AppCenterSample` リポジトリが追加され、リポジトリ名の下に「forked from ytabuchi/AppCenterSample」と表示されているはずです。
 
 GitHub の準備が完了したので、右側の「Clone or download」ボタンをクリックしてローカルに Clone します。
 
@@ -61,12 +61,15 @@ GitHub Desktop の場合は次のような確認画面が出てローカルに C
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/gh004.png" width="450" />
 
+> Windows の場合は、Clone する際にローカルのリポジトリをなるべく「浅いフォルダ」に指定してください。Android のプロジェクトで NTFS の PATH 文字数の制限 260 文字に引っ掛かってしまう場合があるためです。`C:\GitHub\` などをリポジトリのルートフォルダにすることをお勧めします。
+
 Clone されたら GitHub での作業はひとまず完了です。
 
 
 
 
-### App Center アカウントの準備
+
+### App Center での準備
 
 次に App Center のアカウントを作成します。[appcenter.ms](https://appcenter.ms) にアクセスします。
 
@@ -109,6 +112,8 @@ Microsoft アカウントでログインする場合は、アカウントを選�
 
 
 
+
+
 ## App Center にアプリ追加
 
 まずは App Center にアプリを追加していきます。「Add New App」をクリックして、まずは Android アプリを追加します。既にアカウントを持っていたり、プロジェクトを作ったことがある方は右上の「Add New」ボタンから「Add New App」をクリックします。
@@ -129,51 +134,49 @@ Microsoft アカウントでログインする場合は、アカウントを選�
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac106.png" width="600" />
 
-
 Android アプリ「AppCenterSampleAndroid」を開き、「Settings」をクリックすると、右上に「APP SECRET」が確認できます。この Secret は後で使用しますので、すべてのアプリの Secret を控えておいてください。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac107.png" width="600" />
 
-
 App Center での作業はまずは完了です。
 
 
-## Visual Studio プロジェクトの準備
-
-それでは実際に App Center で使用する Xamarin のプロジェクトを作成します。私のプロジェクトを Fork した場合は、「XXX」まで読み飛ばしてください。
 
 
 
+## Visual Studio プロジェクトのビルド
 
-このドキュメントでは Windows の Visual Studio での画面を掲載しています。Mac の Visual Studio for Mac を使用している方は適宜読み替えてください。
+それでは実際に App Center で使用する Xamarin.Forms のプロジェクトを開きましょう。
 
-<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs001.png" width="450" />
+Visual Studio の拡張機能を使用している場合は、次の画面のように「チームエクスプローラー」の「ローカル Git リポジトリ」で `AppCenterSample` をダブルクリックして開きます。
 
-Visual Studio を開き、「新しいプロジェクトの作成」から、「Visual C#＞Cross-Platform＞Corsss-Platform App (Xamarin.Forms)」を選択します。今回はプロジェクトの名前を「AppCenterSample」としました。
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs001.png" width="300" />
 
-<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs002.png" width="450" />
+その後ソリューションから `AppCenterSample` ソリューションを開きます。
 
-「Platform」をすべてチェック、「UI Technology」を「Xamarin.Forms」、「Code Sharing Strategy」を「.NET Standard」にして「OK」をクリックします。
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs002.png" width="300" />
 
-プロジェクトが作成されたら、App Center の NuGet パッケージをインストールします。
+macOS や別の GitHub クライアントを使用している場合は、Finder、Windows エクスプローラーで Clone したフォルダに移動し、`AppCenterSample.sln` をダブルクリックしてプロジェクトを開きます。
 
-Windows の Visual Studio 2017 の場合は、ソリューションを右クリックして、「ソリューションの NuGet パッケージの管理」をクリックし、以下の文字列で検索してすべてのプロジェクトにインストールします。macOS の Visual Studio for Mac の場合は、各プロジェクトを右クリックして、「追加＞NuGet パッケージ」をクリックし、以下の文字列で検索してインストールします。
+> 新規でプロジェクトを作る場合は、iOS／Android／UWP の各プロジェクトに App Center の NuGet パッケージをインストールする必要があります。
+> 
+> Windows の Visual Studio 2017 の場合は、ソリューションを右クリックして、「ソリューションの NuGet パッケージの管理」をクリックし、以下の文字列で検索してすべてのプロジェクトにインストールします。macOS の Visual Studio for Mac の場合は、各プロジェクトを右クリックして、「追加＞NuGet パッケージ」をクリックし、以下の文字列で検索してインストールします。
+> 
+> - `Microsoft.AppCenter.Analytics`（macOS の場合は `App Center Analytics`）
+> - `Microsoft.AppCenter.Crashes`（macOS の場合は `App Center Crashes`）
+> 
+> <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs003.png" width="450" />
+> 
+> PCL／.NET Standard を使用している場合は、iOS／Android／UWP を含むすべてのプロジェクトにインストールすることに注意してください。
+> 
+> <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs004.png" width="300" />
+> 
+> インストールが完了すると、次のようなプロジェクト構成になっているはずです。PCL や Shared プロジェクトの場合は少し異なりますが、iOS／Android／UWP のプロジェクトに `Analytics` と `Crashes` のライブラリが入っていることを確認してください。
+> 
+> <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs005.png" width="300" />
 
-- `Microsoft.AppCenter.Analytics`（macOS の場合は `App Center Analytics`）
-- `Microsoft.AppCenter.Crashes`（macOS の場合は `App Center Crashes`）
 
-<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs004.png" width="450" />
-
-PCL／.NET Standard を使用している場合は、iOS／Android／UWP を含むすべてのプロジェクトにインストールすることに注意してください。
-
-<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs005.png" width="300" />
-
-インストールが完了すると、次のようなプロジェクト構成になっているはずです。PCL や Shared プロジェクトの場合は少し異なりますが、iOS／Android／UWP のプロジェクトに `Analytics` と `Crashes` のライブラリが入っていることを確認してください。
-
-<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs006.png" width="300" />
-
-
-次に Xamarin.Forms プロジェクトの `App.xaml.cs` を開き、以下の using を追加します。
+次に Xamarin.Forms プロジェクトの `App.xaml.cs` を開き、以下の using があることを確認します。
 
 ```cs
 using Microsoft.AppCenter;
@@ -219,13 +222,13 @@ App Center でビルドしたアプリ（今回は Android）の「Analytics」�
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac301.png" width="600" />
 
-GitHub や VSTS（Visual Studio Team Service）、BitBucket のレポジトリに変更があれば自動ビルドを行う仕組みです。
+GitHub や VSTS（Visual Studio Team Service）、BitBucket のリポジトリに変更があれば自動ビルドを行う仕組みです。
 
-今回は、GitHub のレポジトリを指定してみましょう。GitHub をクリックすると、次のような認証画面に移行します。そのまま「Authrize VSAppCenter」をクリックしてください。
+今回は、GitHub のリポジトリを指定してみましょう。GitHub をクリックすると、次のような認証画面に移行します。そのまま「Authrize VSAppCenter」をクリックしてください。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac302.png" width="300" />
 
-自身のレポジトリ一覧が表示されるので、最初に作成したレポジトリを指定します。
+自身のリポジトリ一覧が表示されるので、最初に作成したリポジトリを指定します。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac303.png" width="600" />
 
