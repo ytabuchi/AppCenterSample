@@ -1,7 +1,14 @@
 # App Center Hands On with Xamarin
 
-2017/12/14 [@ytabuchi](https://twitter.com/ytabuchi) Created.
+> 2017/12/14 [@ytabuchi](https://twitter.com/ytabuchi) Created.
 
+## はじめに
+
+このドキュメントでは、GitHub に配置したレポジトリと Visual Studio App Center を連携させて、Xamarin.Forms のアプリの自動ビルド、アプリの Analytics や Crash レポート、配布などを試してみよう！というハンズオンが出来ます。
+
+私 [@ytabuchi](https://twitter.com/ytabuchi) の主宰している JXUG の勉強会、[JXUGC \#24 春の App Center 祭り \- connpass](https://jxug.connpass.com/event/72491/) で行ったミニハンズオン用に用意したものですが、見積もっていた時間がかなり少なかったため、終わらない方もいらっしゃいました。大変申し訳ありませんでした。
+
+そのため、短期間で確実で出来るように内容をブラッシュアップさせたものを再度公開します。是非、App Center での各種機能を味わってみてください。
 
 
 
@@ -12,49 +19,45 @@
 
 ## 事前準備
 
+実際の作業を始める前に、いくつか事前準備が必要です。
 
 
 ### GitHub アカウントの準備
 
-このハンズオンでは、GitHub の連携を使用して App Center の Build や Analytics を体験します。そのため、GitHub のアカウントが必要です。
+このハンズオンでは、GitHub の連携を使用して App Center の Build や Analytics を体験するため、GitHub のアカウントが必要です。
 
 まだ GitHub のアカウントを持っていない方は [github.com](https://github.com/) からアカウントを作成してください。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/gh001.png" width="600" />
 
-#### レポジトリの作成
-
-アカウントを作成したらレポジトリを作成します。
-
-自分のページにアクセスし、「Repositories」タブをクリックして、「New」ボタンからレポジトリを作成します。
-
-<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/gh002.png" width="600" />
-
-任意の名前でレポジトリを作成し、「Add .gitignore」を「Visual Studio」などに指定して「Create repository」をクリックして作成します。
-
-<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/gh003.png" width="600" />
-
-#### .gitignore の設定
-
-
-作成されたレポジトリの `.gitignore` ファイルを開き、[Xamarin 用の設定（現時点ではこの `.gitignore` ファイルがお勧めです。）](https://github.com/ytabuchi/GitIgnoreTest/blob/master/.gitignore) に修正します。「Edit アイコン」をクリックすることで、そのままサイト上でも編集できます。
-
-<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/gh004.png" width="600" />
-
-GitHub の準備が完了したのでローカルに Clone します。
-
-<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/gh005.png" width="600" />
-
-ローカルのクライアントは何でも構いません。以下などがあります。
+また、何らかの GitHub クライアントが必要です。単体で動作する GitHub 製の GitHub Desktop や定番の Sourcetree の他に Visual Studio の拡張機能もあります。以下のリンクからダウンロード、インストールが可能です。
 
 - [GitHub Desktop](https://desktop.github.com/)
 - [Sourcetree](https://ja.atlassian.com/software/sourcetree)
-
-Visual Studio の拡張機能もあります。
-
 - [GitHub Extension for Visual Studio](https://visualstudio.github.com/)
 
 ここではクライアントの使い方は割愛します。興味がある方は是非調べてみてください。
+
+GitHub のクライアントでお持ちの、または作成したアカウントでログインしておきます。
+
+
+
+
+#### レポジトリの作成
+
+アカウントを作成したら、本レポジトリを自身の GitHub に Fork します。
+
+[本レポジトリのルート](https://github.com/ytabuchi/AppCenterSample) にアクセスし、右上の「Fork」ボタンをクリックします。
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/gh002.png" width="600" />
+
+Fork が完了すると、自身のレポジトリに `AppCenterSample` レポジトリが追加され、レポジトリ名の下に「forked from ytabuchi/AppCenterSample」と表示されているはずです。
+
+GitHub の準備が完了したので、右側の「Clone or download」ボタンをクリックしてローカルに Clone します。
+
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/gh005.png" width="600" />
+
+
 
 
 
@@ -74,7 +77,7 @@ App Center には、次の方法でアクセスが出来ます。
 - Google アカウント
 - App Center のアカウント
 
-ここでは、GitHub のアカウントでログインしてみましょう。
+今回は「Continue with GitHub」をクリックして、GitHub のアカウントでログインします。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac002.png" width="600" />
 
@@ -91,8 +94,8 @@ Microsoft アカウントでログインする場合は、アカウントを選�
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac101.png" width="600" />
 
-GitHub の設定の [Authorized OAuth Apps](https://github.com/settings/applications) に App Center が追加されていることが確認できます。
-
+> GitHub の設定の [Authorized OAuth Apps](https://github.com/settings/applications) に App Center が追加されていることが確認できます。<br />
+<br />
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/gh101.png" width="450" >
 
 
@@ -103,7 +106,7 @@ GitHub の設定の [Authorized OAuth Apps](https://github.com/settings/applicat
 
 ## App Center にアプリ追加
 
-そのまま App Center にアプリを追加していきます。「Add New App」をクリックして、まずは Android アプリを追加します。
+まずは App Center にアプリを追加していきます。「Add New App」をクリックして、まずは Android アプリを追加します。既にアカウントを持っていたり、プロジェクトを作ったことがある方は右上の「Add New」ボタンから「Add New App」をクリックします。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac102.png" width="600" />
 
@@ -115,24 +118,29 @@ GitHub の設定の [Authorized OAuth Apps](https://github.com/settings/applicat
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac104.png" width="600" />
 
-左上のアイコンでホーム画面に戻り、同様に「Add new＞Add new app」から iOS アプリ「AppCenterSampleiOS」と UWP アプリ「AppCenterSampleUWP」を作成します。
+左上のアイコンでホーム画面に戻り、同様に「Add new＞Add new app」から iOS アプリ「AppCenterSampleiOS」を作成します。UWP でも試したい場合は、UWP アプリ「AppCenterSampleUWP」も作成します。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac105.png" width="600" />
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac106.png" width="600" />
 
 
-Android アプリ「AppCenterSampleAndroid」を開き、「Settings」をクリックすると、右上に App Secret が確認できます。この Secret は後で使用しますので、Android、iOS、UWP の Secret を控えておいてください。
+Android アプリ「AppCenterSampleAndroid」を開き、「Settings」をクリックすると、右上に「APP SECRET」が確認できます。この Secret は後で使用しますので、すべてのアプリの Secret を控えておいてください。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac107.png" width="600" />
 
 
-
+App Center での作業はまずは完了です。
 
 
 ## Visual Studio プロジェクトの準備
 
-それでは実際に App Center で使用するプロジェクトを作成します。このドキュメントでは Windows の Visual Studio での画面を掲載しています。Mac の Visual Studio for Mac を使用している方は適宜読み替えてください。
+それでは実際に App Center で使用する Xamarin のプロジェクトを作成します。私のプロジェクトを Fork した場合は、「XXX」まで読み飛ばしてください。
+
+
+
+
+このドキュメントでは Windows の Visual Studio での画面を掲載しています。Mac の Visual Studio for Mac を使用している方は適宜読み替えてください。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs001.png" width="450" />
 
@@ -142,26 +150,23 @@ Visual Studio を開き、「新しいプロジェクトの作成」から、「
 
 「Platform」をすべてチェック、「UI Technology」を「Xamarin.Forms」、「Code Sharing Strategy」を「.NET Standard」にして「OK」をクリックします。
 
-プロジェクトが作成されたら使用しているライブラリを最新にしておきましょう。
+プロジェクトが作成されたら、App Center の NuGet パッケージをインストールします。
 
-ソリューションを右クリックして、「ソリューションの NuGet パッケージの管理」から NuGet パッケージマネージャーを開き、「更新」タブの「すべて更新」をチェックし、「更新」ボタンをクリックします。
-
-<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs003.png" width="450" />
-
-そのまま以下の NuGet パッケージをインストールします。
+Windows の Visual Studio 2017 の場合は、ソリューションを右クリックして、「ソリューションの NuGet パッケージの管理」をクリックし、以下の文字列で検索してすべてのプロジェクトにインストールします。macOS の Visual Studio for Mac の場合は、各プロジェクトを右クリックして、「追加＞NuGet パッケージ」をクリックし、以下の文字列で検索してインストールします。
 
 - `Microsoft.AppCenter.Analytics`（macOS の場合は `App Center Analytics`）
 - `Microsoft.AppCenter.Crashes`（macOS の場合は `App Center Crashes`）
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs004.png" width="450" />
 
-PCL／.NET Standard を使用している場合は、すべてのプロジェクトにインストールすることに注意してください。
+PCL／.NET Standard を使用している場合は、iOS／Android／UWP を含むすべてのプロジェクトにインストールすることに注意してください。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs005.png" width="300" />
 
-インストールが完了すると、次のようなプロジェクト構成になっているはずです。
+インストールが完了すると、次のようなプロジェクト構成になっているはずです。PCL や Shared プロジェクトの場合は少し異なりますが、iOS／Android／UWP のプロジェクトに `Analytics` と `Crashes` のライブラリが入っていることを確認してください。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs006.png" width="300" />
+
 
 次に Xamarin.Forms プロジェクトの `App.xaml.cs` を開き、以下の using を追加します。
 
@@ -187,9 +192,9 @@ AppCenter.Start($"uwp={Your UWP App secret here};android={Your Android App secre
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs101.png" width="300" />
 
 
-この時点で、OS 情報などの Analytics が取得出来ていることが確認できます。
+App Secret がこの時点で、OS 情報などの Analytics が取得出来ていることが確認できます。
 
-App Center でビルドしたアプリ（今回は Android）の「Analytics」を開いてみましょう。Emulator で言語設定が英語になっているのが分かります。
+App Center でビルドしたアプリ（今回は Android）の「Analytics」を開いてみましょう。今回は英語の言語設定の Emulator で実行したので、「Top devices」に Emulator、「Languages」に English がリストされているのが分かります。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac201.png" width="600" />
 
