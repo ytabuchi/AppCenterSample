@@ -176,7 +176,7 @@ macOS や別の GitHub クライアントを使用している場合は、Finder
 > <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs005.png" width="300" />
 
 
-次に Xamarin.Forms プロジェクトの `App.xaml.cs` を開き、以下の using があることを確認します。
+次に Xamarin.Forms プロジェクト `AppCenterSample` の `App.xaml.cs` を開き、以下の using があることを確認します。
 
 ```cs
 using Microsoft.AppCenter;
@@ -184,25 +184,35 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 ```
 
-同じファイルの `OnStart()` メソッド内に次のコードを追加します。
+`App` クラスの以下のクラス変数の各キーを「App Center にアプリ追加」の章で作成した各プラットフォームの App Secret で置き換えます。
+
+```csharp
+const string uwpKey = "2b977979-ebbc-40f8-b6d2-cddb98312ac1";
+const string iosKey = "233ad039-4e6d-4baf-8824-3845db2f2907";
+const string androidKey = "a981827b-441f-4ab1-990e-e582d18d60bf";
+```
+
+`App` クラスのオーバーライドメソッド `OnStart()` の次のコードで App Center の処理が実行されます。
 
 ```cs
-AppCenter.Start($"uwp={Your UWP App secret here};android={Your Android App secret here};ios={Your iOS App secret here}",
+AppCenter.Start($"uwp={uwpKey};android={androidKey};ios={iosKey};", 
     typeof(Analytics), typeof(Crashes));
 ```
 
-> Secret は各プラットフォーム毎に発行されます。「App Center にアプリ追加」の章で作成した各プラットフォームの App Secret で上記の {Your xxx App secret here} を置き換えてください。
+それでは、まずは Android アプリをビルドして起動してみましょう。
 
-それでは、Android アプリをビルドして起動してみましょう。
+> java.lang.OutOfMemoryError. Consider increasing the value of $(JavaMaximumHeapSize). Java ran out of memory while executing 'java.exe ...
+> と、Android プロジェクトでヒープメモリのビルドエラーが出る場合があるため、本プロジェクトでは Android プロジェクトのプロパティを開き、「Android オプション＞詳細設定（一番下にあるボタン）＞Java Max Heap Size」を「1G」に指定してあります。
+> 
+> <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs101.png" width="300" />
 
-> java.lang.OutOfMemoryError. Consider increasing the value of $(JavaMaximumHeapSize). Java ran out of memory while executing 'java.exe ...<br />
-と、Android プロジェクトでヒープメモリのビルドエラーが出る場合、Android プロジェクトのプロパティを開き、「Android オプション＞詳細設定（一番下にあるボタン）＞Java Max Heap Size」を「1G」に指定してください。<br />
-<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/vs101.png" width="300" />
+例えば Emulator で次のような画面がでていれば成功です。
 
+<img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/an001.png" width="300" />
 
-App Secret がこの時点で、OS 情報などの Analytics が取得出来ていることが確認できます。
+無事起動が出来たら、App Secret がこの時点で、OS 情報などの Analytics を取得出来ていることが確認できます。
 
-App Center でビルドしたアプリ（今回は Android）の「Analytics」を開いてみましょう。今回は英語の言語設定の Emulator で実行したので、「Top devices」に Emulator、「Languages」に English がリストされているのが分かります。
+ブラウザで App Center のサイトに移動し、ビルドしたアプリ（今回は Android）の「Analytics」を開いてみましょう。今回は英語の言語設定の Emulator で実行したので、「Top devices」に Emulator、「Languages」に English がリストされているのが分かります。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac201.png" width="600" />
 
@@ -212,7 +222,7 @@ App Center でビルドしたアプリ（今回は Android）の「Analytics」�
 
 ## App Center の各種機能を使う
 
-ローカルでソリューションがビルド出来たところで、実際に App Center で色々出来るようにしていきましょう。
+ローカルでプロジェクトがビルドできたところで、実際に App Center で色々設定していきましょう。
 
 
 
@@ -224,15 +234,15 @@ App Center でビルドしたアプリ（今回は Android）の「Analytics」�
 
 GitHub や VSTS（Visual Studio Team Service）、BitBucket のリポジトリに変更があれば自動ビルドを行う仕組みです。
 
-今回は、GitHub のリポジトリを指定してみましょう。GitHub をクリックすると、次のような認証画面に移行します。そのまま「Authrize VSAppCenter」をクリックしてください。
+今回は、GitHub のリポジトリを指定します。GitHub をクリックすると、次のような認証画面に移行します。そのまま「Authrize VSAppCenter」をクリックしてください。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac302.png" width="300" />
 
-自身のリポジトリ一覧が表示されるので、最初に作成したリポジトリを指定します。
+自身のリポジトリ一覧が表示されるので、Fork した `AppCenterSample` を指定します。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac303.png" width="600" />
 
-ブランチをクリックして、「Configure build」をクリックします。
+適切なブランチをクリックして、「Configure build」をクリックします。今回は `master` ブランチで良いでしょう。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac304.png" width="600" />
 
@@ -249,18 +259,23 @@ GitHub や VSTS（Visual Studio Team Service）、BitBucket のリポジトリ�
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac308.png" width="600" />
 
 
-iOS もビルドしてみましょう。iOS の場合は、Simulator 用のビルド（x86 のバイナリ）とデバイス用のビルド（ARM バイナリ）を指定する必要があり、デバイス用のビルドには Apple Developer Program に加入すると取得できる証明書で署名する必要があります。今回は、デバッグビルド、Simulator Build、Sign なしを選択してビルドしてみましょう。
+同様に iOS もビルドしてみましょう。macOS をお持ちでない方も、リポジトリのプロジェクトは App Center がホストしているビルド環境でビルドが出来ます！
 
+アプリを変更するには左上の App Center のロゴから Home 画面に戻り、iOS アプリをクリックします。
 
+iOS の場合は、Simulator 用のビルド（x86 のバイナリ）とデバイス用のビルド（ARM バイナリ）を指定する必要があり、デバイス用のビルドには Apple Developer Program に加入すると取得できる証明書で署名する必要があります。今回は、デバッグビルド、Simulator Build、Sign なしを選択してビルドしてみましょう。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac309.png" width="600" />
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac310.png" width="600" />
 
 
-無事ビルドが完了しました！
+ビルドが無事完了しました！
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac311.png" width="600" />
+
+この段階で、リポジトリのソースコードは元々ある App Secret が入力された状態でビルドされましたが、ローカルの App Secret は皆さんのキーで書き換えられています。
+
 
 
 それでは、App Center の目玉の機能の一つである Analytics と Crash Report を使ってみましょう。

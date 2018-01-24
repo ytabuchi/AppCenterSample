@@ -25,7 +25,7 @@ namespace AppCenterSample
         protected override void OnStart()
         {
             AppCenter.Start($"uwp={uwpKey};android={androidKey};ios={iosKey};", 
-                            typeof(Analytics), typeof(Crashes));
+                typeof(Analytics), typeof(Crashes));
         }
 
         protected override void OnSleep()
