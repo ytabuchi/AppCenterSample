@@ -478,12 +478,14 @@ App Center の左側のメニューで Distribute をクリックし、右上の
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/ac609.png" width="600" />
 
-Android からアクセスするとこのように「Download」のリンクがありますので、ダウンロードしてインストールします。
+Android からアクセスすると次のように「Download」のリンクがありますので、ダウンロードしてインストールします。
 
 <img src="https://raw.githubusercontent.com/ytabuchi/AppCenterSample/master/images/an002.png" width="300" />
 
 
 皆さんも Android アプリを配布してベータテストなどをやってもらいましょう！
+
+iOS アプリの配布を行いたい場合は、Apple Developer Program への登録、証明書の取得、App Center へのアップロードなどが必要になります。Apple Developer Program に加入していない方は試せませんので今回は割愛していますが、興味のある方は是非試してみてください。
 
 
 ## まとめ
